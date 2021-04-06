@@ -21,6 +21,10 @@ namespace D3D_Debug_Overlay
         IntPtr xPtr;
         IntPtr yPtr;
         IntPtr zPtr;
+        int posX;
+        int posY;
+        int size;
+        Color color;
 
         /// <summary>
         /// Instantialize the Form.
@@ -153,21 +157,21 @@ namespace D3D_Debug_Overlay
             {
                 Elements = new List<Capture.Hook.Common.IOverlayElement>
                 {
-                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold)) {
-                            Location = new Point(25, 25),
-                            Color = Color.Red,
+                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
+                            Location = new Point(posX, posY),
+                            Color = color,
                             AntiAliased = true,
                             Text = "X: " + Memory.ManageMemory.ReadMemory<float>(xPtr.ToInt32())
                         },
-                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold)) {
-                            Location = new Point(25, 55),
-                            Color = Color.Red,
+                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
+                            Location = new Point(posX, posY + size + 5),
+                            Color = color,
                             AntiAliased = true,
                             Text = "Y: " + Memory.ManageMemory.ReadMemory<float>(yPtr.ToInt32())
                         },
-                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold)) {
-                            Location = new Point(25, 85),
-                            Color = Color.Red,
+                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
+                            Location = new Point(posX, posY + (2 * size) + 10),
+                            Color = color,
                             AntiAliased = true,
                             Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr.ToInt32())
                         },
@@ -185,10 +189,22 @@ namespace D3D_Debug_Overlay
             xPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxX.Text, 16));
             yPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxY.Text, 16));
             zPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxZ.Text, 16));
+            posX = int.Parse(boxPosX.Text);
+            posY = int.Parse(boxPosY.Text);
+            size = int.Parse(boxSize.Text);
+            color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
             this.bwOverlayDrawer.RunWorkerAsync();
             _captureProcess.BringProcessWindowToFront();
         }
-        
+
+        /// <summary>
+        /// Button to return back to the fullscreen application without crashing.
+        /// </summary>
+        private void BtnShowWindow_Click(object sender, EventArgs e)
+        {
+            _captureProcess.BringProcessWindowToFront();
+        }
+
         /// <summary>
         /// Background thread that updates the overlay.
         /// </summary>
@@ -240,6 +256,6 @@ namespace D3D_Debug_Overlay
             }
             return 1;
         }
-#endregion
+        #endregion
     }
 }
