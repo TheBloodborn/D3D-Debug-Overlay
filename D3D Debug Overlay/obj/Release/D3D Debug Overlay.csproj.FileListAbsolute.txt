@@ -1,0 +1,52 @@
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyHook32.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyHook32Svc.exe
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyHook64.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyHook64Svc.exe
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyLoad32.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyLoad64.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\sharpdx_direct3d11_1_effects_x64.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\sharpdx_direct3d11_1_effects_x86.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\D3D Debug Overlay.exe.config
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\D3D Debug Overlay.exe
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\D3D Debug Overlay.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\Capture.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyHook.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.DXGI.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D10.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Mathematics.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Desktop.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D11.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct2D1.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D11.Effects.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.D3DCompiler.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\Capture.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\EasyHook.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D9.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D9.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.DXGI.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.DXGI.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D10.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D10.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Mathematics.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Mathematics.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Desktop.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Desktop.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D11.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D11.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct2D1.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct2D1.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D11.Effects.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.Direct3D11.Effects.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.D3DCompiler.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\bin\Release\SharpDX.D3DCompiler.xml
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D Debug Overlay.csprojAssemblyReference.cache
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D_Debug_Overlay.Properties.Resources.resources
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D Debug Overlay.csproj.GenerateResource.cache
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D Debug Overlay.csproj.CoreCompileInputs.cache
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D Debug Overlay.csproj.CopyComplete
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D Debug Overlay.exe
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\D3D Debug Overlay\obj\Release\D3D Debug Overlay.pdb

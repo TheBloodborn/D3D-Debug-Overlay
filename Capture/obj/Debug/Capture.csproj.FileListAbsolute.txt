@@ -1,0 +1,17 @@
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\EasyHook32.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\EasyHook32Svc.exe
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\EasyHook64.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\EasyHook64Svc.exe
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\EasyLoad32.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\EasyLoad64.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\sharpdx_direct3d11_1_effects_x64.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\sharpdx_direct3d11_1_effects_x86.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\Capture.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\bin\Capture.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.Properties.Resources.resources
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.csproj.GenerateResource.cache
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.csproj.CoreCompileInputs.cache
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.csproj.CopyComplete
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.dll
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.pdb
+C:\Users\michi\Desktop\DebugOverlay\Direct3DHook-master\Capture\obj\Debug\Capture.csprojAssemblyReference.cache
