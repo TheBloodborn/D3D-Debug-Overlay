@@ -4,6 +4,8 @@ Debug overlay for 3D DirectX games.
 Version 1.0
  ~ Compatibility not guaranteed.
  
+Navigate to D3D Debug Overlay/bin/Release/D3D Debug Overlay.exe to run the application.
+ 
 Bug Log:
  - Alt-tabbing into an injected application will crash the application.
  - Transitioning through a load screen will freeze the overlay updates.
