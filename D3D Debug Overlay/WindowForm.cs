@@ -18,6 +18,7 @@ namespace D3D_Debug_Overlay
         /// Global Variables.
         /// </summary>
         CaptureProcess _captureProcess;
+        //Process _process;
         int xPtr;
         int yPtr;
         int zPtr;
@@ -122,6 +123,7 @@ namespace D3D_Debug_Overlay
                     Direct3DVersion = direct3DVersion,
                     ShowOverlay = cbDrawOverlay.Checked
                 };
+                //_process = process;
                 var captureInterface = new CaptureInterface();
                 captureInterface.RemoteMessage += new MessageReceivedEvent(CaptureInterface_RemoteMessage);
                 _captureProcess = new CaptureProcess(process, cc, captureInterface);
@@ -153,7 +155,7 @@ namespace D3D_Debug_Overlay
         /// <summary>
         /// Determines what is drawn in the overlay.
         /// </summary>
-        private void DrawOverlay()
+        private void DrawOverlay(bool hide)
         {
             _captureProcess.CaptureInterface.DrawOverlayInGame(new Capture.Hook.Common.Overlay
             {
@@ -178,8 +180,12 @@ namespace D3D_Debug_Overlay
                             Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr)
                         },
                 },
-                Hidden = !cbDrawOverlay.Checked
+                Hidden = hide
             });
+        }
+        private void DrawOverlay()
+        {
+            DrawOverlay(!cbDrawOverlay.Checked);
         }
 
         /// <summary>
@@ -196,8 +202,8 @@ namespace D3D_Debug_Overlay
             posY = int.Parse(boxPosY.Text);
             size = int.Parse(boxSize.Text);
             color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
-            this.bwOverlayDrawer.RunWorkerAsync();
             _captureProcess.BringProcessWindowToFront();
+            this.bwOverlayDrawer.RunWorkerAsync();
             btnStopDisplay.Enabled = true;
         }
 
@@ -259,7 +265,14 @@ namespace D3D_Debug_Overlay
             while (!bw.CancellationPending)
             {
                 Thread.Sleep(int.Parse(boxRefresh.Text));
-                DrawOverlay();
+                if (Control.ModifierKeys == Keys.Alt)
+                {
+                    DrawOverlay(true);
+                }
+                else
+                {
+                    DrawOverlay();
+                }
             }
             return 1;
         }
