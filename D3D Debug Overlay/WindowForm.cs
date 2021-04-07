@@ -65,12 +65,14 @@ namespace D3D_Debug_Overlay
                 btnInject.Text = "Detach";
                 btnInject.Enabled = true;
                 btnDisplayOverlay.Enabled = true;
+                btnStopDisplay.Enabled = false;
             }
             else
             {
                 btnInject.Text = "Inject";
                 btnInject.Enabled = true;
                 btnDisplayOverlay.Enabled = false;
+                btnStopDisplay.Enabled = false;
             }
         }
 
@@ -189,7 +191,7 @@ namespace D3D_Debug_Overlay
         }
 
         /// <summary>
-        /// Button to display overlay, this also assigns memory pointers.
+        /// Button to display overlay, this also assigns variables (including memory pointer).
         /// </summary>
         private void BtnDisplayOverlay_Click(object sender, EventArgs e)
         {
@@ -202,13 +204,13 @@ namespace D3D_Debug_Overlay
             posY = int.Parse(boxPosY.Text);
             size = int.Parse(boxSize.Text);
             color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
-            _captureProcess.BringProcessWindowToFront();
             this.bwOverlayDrawer.RunWorkerAsync();
+            _captureProcess.BringProcessWindowToFront();
             btnStopDisplay.Enabled = true;
         }
 
         /// <summary>
-        /// Button to return back to the fullscreen application without crashing.
+        /// Button to stop background thread that updates the overlay.
         /// </summary>
         private void BtnStopDisplay_Click(object sender, EventArgs e)
         {
@@ -252,6 +254,14 @@ namespace D3D_Debug_Overlay
                 string msg = String.Format("An error occurred: {0}", e.Error.Message);
                 MessageBox.Show(msg);
             }
+            /*
+            else if ((int)e.Result == 2)
+            {
+                bwOverlayDrawer.CancelAsync();
+                Thread.Sleep(int.Parse(boxRefresh.Text));
+                BtnInject_Click(null, null);
+            }
+            */
             else
             {
                 // The operation completed normally.
@@ -268,6 +278,7 @@ namespace D3D_Debug_Overlay
                 if (Control.ModifierKeys == Keys.Alt)
                 {
                     DrawOverlay(true);
+                    //return 2; // If you want to set Alt to permanantly stop drawing overlays for this thread process
                 }
                 else
                 {

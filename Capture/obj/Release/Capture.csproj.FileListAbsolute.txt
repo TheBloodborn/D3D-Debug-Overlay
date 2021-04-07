@@ -25,7 +25,6 @@ C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\bin\sharpdx_direct3d11_1_e
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\bin\sharpdx_direct3d11_1_effects_x86.dll
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\bin\Capture.dll
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\bin\Capture.pdb
-C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Release\Capture.csprojAssemblyReference.cache
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Release\Capture.Properties.Resources.resources
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Release\Capture.csproj.GenerateResource.cache
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Release\Capture.csproj.CoreCompileInputs.cache
