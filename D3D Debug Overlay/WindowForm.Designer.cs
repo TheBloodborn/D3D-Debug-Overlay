@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.panelOverlay = new System.Windows.Forms.Panel();
-            this.btnShowWindow = new System.Windows.Forms.Button();
+            this.btnStopDisplay = new System.Windows.Forms.Button();
             this.boxRefresh = new System.Windows.Forms.TextBox();
             this.labelRefresh = new System.Windows.Forms.Label();
             this.btnDisplayOverlay = new System.Windows.Forms.Button();
@@ -69,7 +69,7 @@
             // panelOverlay
             // 
             this.panelOverlay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOverlay.Controls.Add(this.btnShowWindow);
+            this.panelOverlay.Controls.Add(this.btnStopDisplay);
             this.panelOverlay.Controls.Add(this.boxRefresh);
             this.panelOverlay.Controls.Add(this.labelRefresh);
             this.panelOverlay.Controls.Add(this.btnDisplayOverlay);
@@ -88,16 +88,17 @@
             this.panelOverlay.Size = new System.Drawing.Size(251, 217);
             this.panelOverlay.TabIndex = 46;
             // 
-            // btnShowWindow
+            // btnStopDisplay
             // 
-            this.btnShowWindow.Location = new System.Drawing.Point(8, 183);
-            this.btnShowWindow.Margin = new System.Windows.Forms.Padding(4);
-            this.btnShowWindow.Name = "btnShowWindow";
-            this.btnShowWindow.Size = new System.Drawing.Size(127, 28);
-            this.btnShowWindow.TabIndex = 47;
-            this.btnShowWindow.Text = "Show Window";
-            this.btnShowWindow.UseVisualStyleBackColor = true;
-            this.btnShowWindow.Click += new System.EventHandler(this.BtnShowWindow_Click);
+            this.btnStopDisplay.Enabled = false;
+            this.btnStopDisplay.Location = new System.Drawing.Point(8, 183);
+            this.btnStopDisplay.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStopDisplay.Name = "btnStopDisplay";
+            this.btnStopDisplay.Size = new System.Drawing.Size(127, 28);
+            this.btnStopDisplay.TabIndex = 47;
+            this.btnStopDisplay.Text = "Stop Display";
+            this.btnStopDisplay.UseVisualStyleBackColor = true;
+            this.btnStopDisplay.Click += new System.EventHandler(this.BtnStopDisplay_Click);
             // 
             // boxRefresh
             // 
@@ -120,6 +121,7 @@
             // 
             // btnDisplayOverlay
             // 
+            this.btnDisplayOverlay.Enabled = false;
             this.btnDisplayOverlay.Location = new System.Drawing.Point(143, 183);
             this.btnDisplayOverlay.Margin = new System.Windows.Forms.Padding(4);
             this.btnDisplayOverlay.Name = "btnDisplayOverlay";
@@ -478,7 +480,7 @@
         private System.Windows.Forms.TextBox txtDebugLog;
         private System.Windows.Forms.Label labelCoords;
         private System.Windows.Forms.Label labelOverlay;
-        private System.Windows.Forms.Button btnShowWindow;
+        private System.Windows.Forms.Button btnStopDisplay;
         private System.Windows.Forms.TextBox boxPosX;
         private System.Windows.Forms.Label labelPos;
         private System.Windows.Forms.TextBox boxPosY;

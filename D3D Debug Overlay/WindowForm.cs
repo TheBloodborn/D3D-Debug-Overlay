@@ -18,9 +18,9 @@ namespace D3D_Debug_Overlay
         /// Global Variables.
         /// </summary>
         CaptureProcess _captureProcess;
-        IntPtr xPtr;
-        IntPtr yPtr;
-        IntPtr zPtr;
+        int xPtr;
+        int yPtr;
+        int zPtr;
         int posX;
         int posY;
         int size;
@@ -54,6 +54,7 @@ namespace D3D_Debug_Overlay
             }
             else
             {
+                bwOverlayDrawer.CancelAsync();
                 HookManager.RemoveHookedProcess(_captureProcess.Process.Id);
                 _captureProcess.CaptureInterface.Disconnect();
                 _captureProcess = null;
@@ -62,11 +63,13 @@ namespace D3D_Debug_Overlay
             {
                 btnInject.Text = "Detach";
                 btnInject.Enabled = true;
+                btnDisplayOverlay.Enabled = true;
             }
             else
             {
                 btnInject.Text = "Inject";
                 btnInject.Enabled = true;
+                btnDisplayOverlay.Enabled = false;
             }
         }
 
@@ -119,7 +122,6 @@ namespace D3D_Debug_Overlay
                     Direct3DVersion = direct3DVersion,
                     ShowOverlay = cbDrawOverlay.Checked
                 };
-
                 var captureInterface = new CaptureInterface();
                 captureInterface.RemoteMessage += new MessageReceivedEvent(CaptureInterface_RemoteMessage);
                 _captureProcess = new CaptureProcess(process, cc, captureInterface);
@@ -161,19 +163,19 @@ namespace D3D_Debug_Overlay
                             Location = new Point(posX, posY),
                             Color = color,
                             AntiAliased = true,
-                            Text = "X: " + Memory.ManageMemory.ReadMemory<float>(xPtr.ToInt32())
+                            Text = "X: " + Memory.ManageMemory.ReadMemory<float>(xPtr)
                         },
                     new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
                             Location = new Point(posX, posY + size + 5),
                             Color = color,
                             AntiAliased = true,
-                            Text = "Y: " + Memory.ManageMemory.ReadMemory<float>(yPtr.ToInt32())
+                            Text = "Y: " + Memory.ManageMemory.ReadMemory<float>(yPtr)
                         },
                     new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
                             Location = new Point(posX, posY + (2 * size) + 10),
                             Color = color,
                             AntiAliased = true,
-                            Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr.ToInt32())
+                            Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr)
                         },
                 },
                 Hidden = !cbDrawOverlay.Checked
@@ -185,24 +187,29 @@ namespace D3D_Debug_Overlay
         /// </summary>
         private void BtnDisplayOverlay_Click(object sender, EventArgs e)
         {
+            btnDisplayOverlay.Enabled = false;
             IntPtr basePtr = IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, Convert.ToInt32(boxAddress.Text, 16));
-            xPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxX.Text, 16));
-            yPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxY.Text, 16));
-            zPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxZ.Text, 16));
+            xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxX.Text, 16)).ToInt64();
+            yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxY.Text, 16)).ToInt64();
+            zPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxZ.Text, 16)).ToInt64();
             posX = int.Parse(boxPosX.Text);
             posY = int.Parse(boxPosY.Text);
             size = int.Parse(boxSize.Text);
             color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
             this.bwOverlayDrawer.RunWorkerAsync();
             _captureProcess.BringProcessWindowToFront();
+            btnStopDisplay.Enabled = true;
         }
 
         /// <summary>
         /// Button to return back to the fullscreen application without crashing.
         /// </summary>
-        private void BtnShowWindow_Click(object sender, EventArgs e)
+        private void BtnStopDisplay_Click(object sender, EventArgs e)
         {
-            _captureProcess.BringProcessWindowToFront();
+            btnStopDisplay.Enabled = false;
+            this.bwOverlayDrawer.CancelAsync();
+            Thread.Sleep(int.Parse(boxRefresh.Text));
+            btnDisplayOverlay.Enabled = true;
         }
 
         /// <summary>
@@ -231,7 +238,7 @@ namespace D3D_Debug_Overlay
             if (e.Cancelled)
             {
                 // The user canceled the operation.
-                MessageBox.Show("Operation was canceled");
+                //MessageBox.Show("Operation was canceled");
             }
             else if (e.Error != null)
             {
@@ -242,8 +249,8 @@ namespace D3D_Debug_Overlay
             else
             {
                 // The operation completed normally.
-                string msg = String.Format("Result = {0}", e.Result);
-                MessageBox.Show(msg);
+                //string msg = String.Format("Result = {0}", e.Result);
+                //MessageBox.Show(msg);
             }
         }
 
