@@ -188,10 +188,10 @@ namespace D3D_Debug_Overlay
         private void BtnDisplayOverlay_Click(object sender, EventArgs e)
         {
             btnDisplayOverlay.Enabled = false;
-            IntPtr basePtr = IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, Convert.ToInt32(boxAddress.Text, 16));
-            xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxX.Text, 16)).ToInt64();
-            yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxY.Text, 16)).ToInt64();
-            zPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxZ.Text, 16)).ToInt64();
+            int basePtr = (int)IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, (int)Convert.ToInt64(boxAddress.Text, 16)).ToInt64();
+            xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxX.Text, 16)).ToInt64();
+            yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxY.Text, 16)).ToInt64();
+            zPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxZ.Text, 16)).ToInt64();
             posX = int.Parse(boxPosX.Text);
             posY = int.Parse(boxPosY.Text);
             size = int.Parse(boxSize.Text);
