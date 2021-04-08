@@ -31,4 +31,3 @@ C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Debug\Capture.
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Debug\Capture.csproj.CopyComplete
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Debug\Capture.dll
 C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Debug\Capture.pdb
-C:\Users\michi\Desktop\DebugOverlay\D3D Debug Overlay\Capture\obj\Debug\Capture.csprojAssemblyReference.cache

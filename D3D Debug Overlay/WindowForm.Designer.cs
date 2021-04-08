@@ -413,6 +413,7 @@
             this.boxAddress.Name = "boxAddress";
             this.boxAddress.Size = new System.Drawing.Size(195, 22);
             this.boxAddress.TabIndex = 36;
+            this.boxAddress.Text = "00000000";
             // 
             // bwOverlayDrawer
             // 
