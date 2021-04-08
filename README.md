@@ -19,7 +19,7 @@ Bug Log:
  - Overflow errors on certain addresses in certain games (i.e. LEGO Marvel Super Heroes 2).
     - Requires further testing. 
  
-Changelog (1.1):
+Change Log (1.1):
  - Fixed overflow on memory addresses.
  - Added customization options for the overlay text.
  - Added hotkeys to hide the overlay text and to enable/disable the overlay entirely
