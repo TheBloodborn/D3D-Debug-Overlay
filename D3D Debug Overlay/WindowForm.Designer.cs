@@ -62,6 +62,7 @@
             this.boxAddress = new System.Windows.Forms.TextBox();
             this.bwOverlayDrawer = new System.ComponentModel.BackgroundWorker();
             this.txtDebugLog = new System.Windows.Forms.TextBox();
+            this.bwHotkeys = new System.ComponentModel.BackgroundWorker();
             this.panelOverlay.SuspendLayout();
             this.panelCoords.SuspendLayout();
             this.SuspendLayout();
@@ -301,11 +302,11 @@
             this.labelColour.TabIndex = 55;
             this.labelColour.Text = "Text Colour:";
             // 
-            // textBox6
+            // boxPosX
             // 
             this.boxPosX.Location = new System.Drawing.Point(97, 186);
             this.boxPosX.Margin = new System.Windows.Forms.Padding(4);
-            this.boxPosX.Name = "textBox6";
+            this.boxPosX.Name = "boxPosX";
             this.boxPosX.Size = new System.Drawing.Size(50, 22);
             this.boxPosX.TabIndex = 54;
             this.boxPosX.Text = "25";
@@ -431,6 +432,12 @@
             this.txtDebugLog.Size = new System.Drawing.Size(481, 217);
             this.txtDebugLog.TabIndex = 16;
             // 
+            // bwHotkeys
+            // 
+            this.bwHotkeys.WorkerSupportsCancellation = true;
+            this.bwHotkeys.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BwHotkeys_DoWork);
+            this.bwHotkeys.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BwHotkeys_RunWorkerCompleted);
+            // 
             // WindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -488,6 +495,7 @@
         private System.Windows.Forms.Label labelColour;
         private System.Windows.Forms.TextBox boxColour;
         private System.Windows.Forms.TextBox boxSize;
+        private System.ComponentModel.BackgroundWorker bwHotkeys;
     }
 }
 

@@ -19,6 +19,7 @@ namespace D3D_Debug_Overlay
         /// </summary>
         CaptureProcess _captureProcess;
         //Process _process;
+        //int basePtr;
         int xPtr;
         int yPtr;
         int zPtr;
@@ -52,9 +53,11 @@ namespace D3D_Debug_Overlay
             {
                 btnInject.Enabled = false;
                 AttachProcess();
+                bwHotkeys.RunWorkerAsync();
             }
             else
             {
+                bwHotkeys.CancelAsync();
                 bwOverlayDrawer.CancelAsync();
                 HookManager.RemoveHookedProcess(_captureProcess.Process.Id);
                 _captureProcess.CaptureInterface.Disconnect();
@@ -65,7 +68,7 @@ namespace D3D_Debug_Overlay
                 btnInject.Text = "Detach";
                 btnInject.Enabled = true;
                 btnDisplayOverlay.Enabled = true;
-                btnStopDisplay.Enabled = false;
+                btnStopDisplay.Enabled = true;
             }
             else
             {
@@ -156,7 +159,46 @@ namespace D3D_Debug_Overlay
 
         /// <summary>
         /// Determines what is drawn in the overlay.
+        /// modes {0, 1, 2, 3} correspond to {false, true, cbDrawOverlay.Checked, !cbDrawOverlay.Checked}.
         /// </summary>
+        
+        private bool SwitchDisplay(bool display)
+        {
+            if (display)
+            {
+                BtnStopDisplay_Click(null, null);
+                return false;
+            }
+            else
+            {
+                DisplayOverlay();
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Determines what is drawn in the overlay.
+        /// modes {0, 1, 2, 3} correspond to {false, true, cbDrawOverlay.Checked, !cbDrawOverlay.Checked}.
+        /// </summary>
+        private void DrawOverlay(int mode)
+        {
+            if (mode == 0)
+            {
+                DrawOverlay(false);
+            }
+            if (mode == 1)
+            {
+                DrawOverlay(true);
+            }
+            if (mode == 2)
+            {
+                DrawOverlay(cbDrawOverlay.Checked);
+            }
+            if (mode == 3)
+            {
+                DrawOverlay(!cbDrawOverlay.Checked);
+            }
+        }
         private void DrawOverlay(bool hide)
         {
             _captureProcess.CaptureInterface.DrawOverlayInGame(new Capture.Hook.Common.Overlay
@@ -185,17 +227,18 @@ namespace D3D_Debug_Overlay
                 Hidden = hide
             });
         }
-        private void DrawOverlay()
-        {
-            DrawOverlay(!cbDrawOverlay.Checked);
-        }
 
         /// <summary>
         /// Button to display overlay, this also assigns variables (including memory pointer).
         /// </summary>
         private void BtnDisplayOverlay_Click(object sender, EventArgs e)
         {
-            btnDisplayOverlay.Enabled = false;
+            DisplayOverlay();
+            _captureProcess.BringProcessWindowToFront();
+        }
+        private void DisplayOverlay()
+        {
+            //btnDisplayOverlay.Enabled = false;
             int basePtr = (int)IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, (int)Convert.ToInt64(boxAddress.Text, 16)).ToInt64();
             xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxX.Text, 16)).ToInt64();
             yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxY.Text, 16)).ToInt64();
@@ -205,8 +248,7 @@ namespace D3D_Debug_Overlay
             size = int.Parse(boxSize.Text);
             color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
             this.bwOverlayDrawer.RunWorkerAsync();
-            _captureProcess.BringProcessWindowToFront();
-            btnStopDisplay.Enabled = true;
+            //btnStopDisplay.Enabled = true;
         }
 
         /// <summary>
@@ -214,16 +256,18 @@ namespace D3D_Debug_Overlay
         /// </summary>
         private void BtnStopDisplay_Click(object sender, EventArgs e)
         {
-            btnStopDisplay.Enabled = false;
+            //btnStopDisplay.Enabled = false;
             this.bwOverlayDrawer.CancelAsync();
             Thread.Sleep(int.Parse(boxRefresh.Text));
-            btnDisplayOverlay.Enabled = true;
+            DrawOverlay(1);
+            Thread.Sleep(int.Parse(boxRefresh.Text));
+            //btnDisplayOverlay.Enabled = true;
         }
 
         /// <summary>
         /// Background thread that updates the overlay.
         /// </summary>
-        #region Background Thread
+        #region Background Overlay Thread
         private void BwOverlayDrawer_DoWork(object sender, DoWorkEventArgs e)
         {
             // Do not access the form's BackgroundWorker reference directly.
@@ -277,12 +321,69 @@ namespace D3D_Debug_Overlay
                 Thread.Sleep(int.Parse(boxRefresh.Text));
                 if (Control.ModifierKeys == Keys.Alt)
                 {
-                    DrawOverlay(true);
-                    //return 2; // If you want to set Alt to permanantly stop drawing overlays for this thread process
+                    DrawOverlay(2);
+                    //return 2; // If you want to set Alt to permanantly switch drawing overlays for this thread process
                 }
                 else
                 {
-                    DrawOverlay();
+                    DrawOverlay(3);
+                }
+            }
+            return 1;
+        }
+        #endregion
+
+        /// <summary>
+        /// Background thread that keeps track of hotkeys.
+        /// </summary>
+        #region Background Hotkey Thread
+        private void BwHotkeys_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Do not access the form's BackgroundWorker reference directly.
+            // Instead, use the reference provided by the sender parameter.
+            BackgroundWorker bw = sender as BackgroundWorker;
+
+            // Start the time-consuming operation.
+            e.Result = ReadHotkeys(bw);
+
+            // If the operation was canceled by the user,
+            // set the DoWorkEventArgs.Cancel property to true.
+            if (bw.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void BwHotkeys_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                // The user canceled the operation.
+                //MessageBox.Show("Operation was canceled");
+            }
+            else if (e.Error != null)
+            {
+                // There was an error during the operation.
+                string msg = String.Format("An error occurred: {0}", e.Error.Message);
+                MessageBox.Show(msg);
+            }
+            else
+            {
+                // The operation completed normally.
+                //string msg = String.Format("Result = {0}", e.Result);
+                //MessageBox.Show(msg);
+            }
+        }
+
+        private int ReadHotkeys(BackgroundWorker bw)
+        {
+            bool display = false;
+            while (!bw.CancellationPending)
+            {
+                if (Control.ModifierKeys == Keys.Control)
+                {
+                    display = SwitchDisplay(display);
+                    Thread.Sleep(100);
                 }
             }
             return 1;
