@@ -388,6 +388,7 @@ namespace D3D_Debug_Overlay
                     SwitchDisplay();
                     Thread.Sleep(300);
                 }
+                Thread.Sleep(10);
             }
             return 1;
         }
