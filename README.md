@@ -1,5 +1,5 @@
 # D3D-Debug-Overlay
-Debug overlay for 3D DirectX games.
+Debug overlay for DirectX 3D games.
 
 Version 1.1
  ~ Compatibility not guaranteed.
