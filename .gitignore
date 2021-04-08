@@ -1,0 +1,5 @@
+*.suo
+*.user
+Capture/obj
+D3D Debug Overlay/obj
+bin

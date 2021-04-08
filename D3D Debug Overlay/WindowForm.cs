@@ -18,9 +18,15 @@ namespace D3D_Debug_Overlay
         /// Global Variables.
         /// </summary>
         CaptureProcess _captureProcess;
-        IntPtr xPtr;
-        IntPtr yPtr;
-        IntPtr zPtr;
+        //Process _process;
+        //int basePtr;
+        int xPtr;
+        int yPtr;
+        int zPtr;
+        int posX;
+        int posY;
+        int size;
+        Color color;
 
         /// <summary>
         /// Instantialize the Form.
@@ -47,9 +53,12 @@ namespace D3D_Debug_Overlay
             {
                 btnInject.Enabled = false;
                 AttachProcess();
+                bwHotkeys.RunWorkerAsync();
             }
             else
             {
+                bwHotkeys.CancelAsync();
+                bwOverlayDrawer.CancelAsync();
                 HookManager.RemoveHookedProcess(_captureProcess.Process.Id);
                 _captureProcess.CaptureInterface.Disconnect();
                 _captureProcess = null;
@@ -58,11 +67,15 @@ namespace D3D_Debug_Overlay
             {
                 btnInject.Text = "Detach";
                 btnInject.Enabled = true;
+                btnDisplayOverlay.Enabled = true;
+                btnStopDisplay.Enabled = true;
             }
             else
             {
                 btnInject.Text = "Inject";
                 btnInject.Enabled = true;
+                btnDisplayOverlay.Enabled = false;
+                btnStopDisplay.Enabled = false;
             }
         }
 
@@ -115,7 +128,7 @@ namespace D3D_Debug_Overlay
                     Direct3DVersion = direct3DVersion,
                     ShowOverlay = cbDrawOverlay.Checked
                 };
-
+                //_process = process;
                 var captureInterface = new CaptureInterface();
                 captureInterface.RemoteMessage += new MessageReceivedEvent(CaptureInterface_RemoteMessage);
                 _captureProcess = new CaptureProcess(process, cc, captureInterface);
@@ -146,53 +159,115 @@ namespace D3D_Debug_Overlay
 
         /// <summary>
         /// Determines what is drawn in the overlay.
+        /// modes {0, 1, 2, 3} correspond to {false, true, cbDrawOverlay.Checked, !cbDrawOverlay.Checked}.
         /// </summary>
-        private void DrawOverlay()
+        
+        private bool SwitchDisplay(bool display)
+        {
+            if (display)
+            {
+                BtnStopDisplay_Click(null, null);
+                return false;
+            }
+            else
+            {
+                DisplayOverlay();
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Determines what is drawn in the overlay.
+        /// modes {0, 1, 2, 3} correspond to {false, true, cbDrawOverlay.Checked, !cbDrawOverlay.Checked}.
+        /// </summary>
+        private void DrawOverlay(int mode)
+        {
+            if (mode == 0)
+            {
+                DrawOverlay(false);
+            }
+            if (mode == 1)
+            {
+                DrawOverlay(true);
+            }
+            if (mode == 2)
+            {
+                DrawOverlay(cbDrawOverlay.Checked);
+            }
+            if (mode == 3)
+            {
+                DrawOverlay(!cbDrawOverlay.Checked);
+            }
+        }
+        private void DrawOverlay(bool hide)
         {
             _captureProcess.CaptureInterface.DrawOverlayInGame(new Capture.Hook.Common.Overlay
             {
                 Elements = new List<Capture.Hook.Common.IOverlayElement>
                 {
-                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold)) {
-                            Location = new Point(25, 25),
-                            Color = Color.Red,
+                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
+                            Location = new Point(posX, posY),
+                            Color = color,
                             AntiAliased = true,
-                            Text = "X: " + Memory.ManageMemory.ReadMemory<float>(xPtr.ToInt32())
+                            Text = "X: " + Memory.ManageMemory.ReadMemory<float>(xPtr)
                         },
-                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold)) {
-                            Location = new Point(25, 55),
-                            Color = Color.Red,
+                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
+                            Location = new Point(posX, posY + size + 5),
+                            Color = color,
                             AntiAliased = true,
-                            Text = "Y: " + Memory.ManageMemory.ReadMemory<float>(yPtr.ToInt32())
+                            Text = "Y: " + Memory.ManageMemory.ReadMemory<float>(yPtr)
                         },
-                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold)) {
-                            Location = new Point(25, 85),
-                            Color = Color.Red,
+                    new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
+                            Location = new Point(posX, posY + (2 * size) + 10),
+                            Color = color,
                             AntiAliased = true,
-                            Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr.ToInt32())
+                            Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr)
                         },
                 },
-                Hidden = !cbDrawOverlay.Checked
+                Hidden = hide
             });
         }
 
         /// <summary>
-        /// Button to display overlay, this also assigns memory pointers.
+        /// Button to display overlay, this also assigns variables (including memory pointer).
         /// </summary>
         private void BtnDisplayOverlay_Click(object sender, EventArgs e)
         {
-            IntPtr basePtr = IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, Convert.ToInt32(boxAddress.Text, 16));
-            xPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxX.Text, 16));
-            yPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxY.Text, 16));
-            zPtr = IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr.ToInt32()), Convert.ToInt32(boxZ.Text, 16));
-            this.bwOverlayDrawer.RunWorkerAsync();
+            DisplayOverlay();
             _captureProcess.BringProcessWindowToFront();
         }
-        
+        private void DisplayOverlay()
+        {
+            //btnDisplayOverlay.Enabled = false;
+            int basePtr = (int)IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, (int)Convert.ToInt64(boxAddress.Text, 16)).ToInt64();
+            xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxX.Text, 16)).ToInt64();
+            yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxY.Text, 16)).ToInt64();
+            zPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxZ.Text, 16)).ToInt64();
+            posX = int.Parse(boxPosX.Text);
+            posY = int.Parse(boxPosY.Text);
+            size = int.Parse(boxSize.Text);
+            color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
+            this.bwOverlayDrawer.RunWorkerAsync();
+            //btnStopDisplay.Enabled = true;
+        }
+
+        /// <summary>
+        /// Button to stop background thread that updates the overlay.
+        /// </summary>
+        private void BtnStopDisplay_Click(object sender, EventArgs e)
+        {
+            //btnStopDisplay.Enabled = false;
+            this.bwOverlayDrawer.CancelAsync();
+            Thread.Sleep(int.Parse(boxRefresh.Text));
+            DrawOverlay(1);
+            Thread.Sleep(int.Parse(boxRefresh.Text));
+            //btnDisplayOverlay.Enabled = true;
+        }
+
         /// <summary>
         /// Background thread that updates the overlay.
         /// </summary>
-        #region Background Thread
+        #region Background Overlay Thread
         private void BwOverlayDrawer_DoWork(object sender, DoWorkEventArgs e)
         {
             // Do not access the form's BackgroundWorker reference directly.
@@ -215,7 +290,76 @@ namespace D3D_Debug_Overlay
             if (e.Cancelled)
             {
                 // The user canceled the operation.
-                MessageBox.Show("Operation was canceled");
+                //MessageBox.Show("Operation was canceled");
+            }
+            else if (e.Error != null)
+            {
+                // There was an error during the operation.
+                string msg = String.Format("An error occurred: {0}", e.Error.Message);
+                MessageBox.Show(msg);
+            }
+            /*
+            else if ((int)e.Result == 2)
+            {
+                bwOverlayDrawer.CancelAsync();
+                Thread.Sleep(int.Parse(boxRefresh.Text));
+                BtnInject_Click(null, null);
+            }
+            */
+            else
+            {
+                // The operation completed normally.
+                //string msg = String.Format("Result = {0}", e.Result);
+                //MessageBox.Show(msg);
+            }
+        }
+
+        private int UpdateOverlay(BackgroundWorker bw)
+        {
+            while (!bw.CancellationPending)
+            {
+                Thread.Sleep(int.Parse(boxRefresh.Text));
+                if (Control.ModifierKeys == Keys.Alt)
+                {
+                    DrawOverlay(2);
+                    //return 2; // If you want to set Alt to permanantly switch drawing overlays for this thread process
+                }
+                else
+                {
+                    DrawOverlay(3);
+                }
+            }
+            return 1;
+        }
+        #endregion
+
+        /// <summary>
+        /// Background thread that keeps track of hotkeys.
+        /// </summary>
+        #region Background Hotkey Thread
+        private void BwHotkeys_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Do not access the form's BackgroundWorker reference directly.
+            // Instead, use the reference provided by the sender parameter.
+            BackgroundWorker bw = sender as BackgroundWorker;
+
+            // Start the time-consuming operation.
+            e.Result = ReadHotkeys(bw);
+
+            // If the operation was canceled by the user,
+            // set the DoWorkEventArgs.Cancel property to true.
+            if (bw.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void BwHotkeys_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                // The user canceled the operation.
+                //MessageBox.Show("Operation was canceled");
             }
             else if (e.Error != null)
             {
@@ -226,20 +370,24 @@ namespace D3D_Debug_Overlay
             else
             {
                 // The operation completed normally.
-                string msg = String.Format("Result = {0}", e.Result);
-                MessageBox.Show(msg);
+                //string msg = String.Format("Result = {0}", e.Result);
+                //MessageBox.Show(msg);
             }
         }
 
-        private int UpdateOverlay(BackgroundWorker bw)
+        private int ReadHotkeys(BackgroundWorker bw)
         {
+            bool display = false;
             while (!bw.CancellationPending)
             {
-                Thread.Sleep(int.Parse(boxRefresh.Text));
-                DrawOverlay();
+                if (Control.ModifierKeys == Keys.Control)
+                {
+                    display = SwitchDisplay(display);
+                    Thread.Sleep(100);
+                }
             }
             return 1;
         }
-#endregion
+        #endregion
     }
 }
