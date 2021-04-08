@@ -162,17 +162,15 @@ namespace D3D_Debug_Overlay
         /// modes {0, 1, 2, 3} correspond to {false, true, cbDrawOverlay.Checked, !cbDrawOverlay.Checked}.
         /// </summary>
         
-        private bool SwitchDisplay(bool display)
+        private void SwitchDisplay()
         {
-            if (display)
+            if (bwOverlayDrawer.IsBusy)
             {
                 BtnStopDisplay_Click(null, null);
-                return false;
             }
             else
             {
                 DisplayOverlay();
-                return true;
             }
         }
 
@@ -239,15 +237,18 @@ namespace D3D_Debug_Overlay
         private void DisplayOverlay()
         {
             //btnDisplayOverlay.Enabled = false;
-            int basePtr = (int)IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, (int)Convert.ToInt64(boxAddress.Text, 16)).ToInt64();
-            xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxX.Text, 16)).ToInt64();
-            yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxY.Text, 16)).ToInt64();
-            zPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxZ.Text, 16)).ToInt64();
-            posX = int.Parse(boxPosX.Text);
-            posY = int.Parse(boxPosY.Text);
-            size = int.Parse(boxSize.Text);
-            color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
-            this.bwOverlayDrawer.RunWorkerAsync();
+            if (!bwOverlayDrawer.IsBusy)
+            {
+                int basePtr = (int)IntPtr.Add(Memory.ManageMemory.m_Process.MainModule.BaseAddress, (int)Convert.ToInt64(boxAddress.Text, 16)).ToInt64();
+                xPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxX.Text, 16)).ToInt64();
+                yPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxY.Text, 16)).ToInt64();
+                zPtr = (int)IntPtr.Add(Memory.ManageMemory.ReadMemory<IntPtr>(basePtr), (int)Convert.ToInt64(boxZ.Text, 16)).ToInt64();
+                posX = int.Parse(boxPosX.Text);
+                posY = int.Parse(boxPosY.Text);
+                size = int.Parse(boxSize.Text);
+                color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
+                this.bwOverlayDrawer.RunWorkerAsync();
+            }
             //btnStopDisplay.Enabled = true;
         }
 
@@ -257,10 +258,13 @@ namespace D3D_Debug_Overlay
         private void BtnStopDisplay_Click(object sender, EventArgs e)
         {
             //btnStopDisplay.Enabled = false;
-            this.bwOverlayDrawer.CancelAsync();
-            Thread.Sleep(int.Parse(boxRefresh.Text));
-            DrawOverlay(1);
-            Thread.Sleep(int.Parse(boxRefresh.Text));
+            if (bwOverlayDrawer.IsBusy)
+            {
+                this.bwOverlayDrawer.CancelAsync();
+                Thread.Sleep(int.Parse(boxRefresh.Text));
+                DrawOverlay(1);
+                Thread.Sleep(int.Parse(boxRefresh.Text));
+            }
             //btnDisplayOverlay.Enabled = true;
         }
 
@@ -377,13 +381,12 @@ namespace D3D_Debug_Overlay
 
         private int ReadHotkeys(BackgroundWorker bw)
         {
-            bool display = false;
             while (!bw.CancellationPending)
             {
                 if (Control.ModifierKeys == Keys.Control)
                 {
-                    display = SwitchDisplay(display);
-                    Thread.Sleep(100);
+                    SwitchDisplay();
+                    Thread.Sleep(300);
                 }
             }
             return 1;
