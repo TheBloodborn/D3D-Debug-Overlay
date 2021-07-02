@@ -252,6 +252,7 @@
             this.boxApp.Name = "boxApp";
             this.boxApp.Size = new System.Drawing.Size(129, 22);
             this.boxApp.TabIndex = 6;
+            this.boxApp.TextChanged += new System.EventHandler(this.boxApp_TextChanged);
             // 
             // btnInject
             // 
@@ -499,6 +500,7 @@
             // cbFullList
             // 
             this.cbFullList.AutoSize = true;
+            this.cbFullList.Enabled = false;
             this.cbFullList.Location = new System.Drawing.Point(86, 101);
             this.cbFullList.Margin = new System.Windows.Forms.Padding(4);
             this.cbFullList.Name = "cbFullList";
@@ -506,14 +508,17 @@
             this.cbFullList.TabIndex = 64;
             this.cbFullList.Text = "Use Entire List";
             this.cbFullList.UseVisualStyleBackColor = true;
+            this.cbFullList.CheckedChanged += new System.EventHandler(this.cbFullList_CheckedChanged);
             // 
             // dropdownDoors
             // 
+            this.dropdownDoors.Enabled = false;
             this.dropdownDoors.FormattingEnabled = true;
             this.dropdownDoors.Location = new System.Drawing.Point(7, 129);
             this.dropdownDoors.Name = "dropdownDoors";
             this.dropdownDoors.Size = new System.Drawing.Size(195, 24);
             this.dropdownDoors.TabIndex = 63;
+            this.dropdownDoors.SelectedIndexChanged += new System.EventHandler(this.dropdownDoors_SelectedIndexChanged);
             // 
             // cbDoor
             // 
@@ -525,9 +530,11 @@
             this.cbDoor.TabIndex = 62;
             this.cbDoor.Text = "Use Door Finding Tool";
             this.cbDoor.UseVisualStyleBackColor = true;
+            this.cbDoor.CheckedChanged += new System.EventHandler(this.cbDoor_CheckedChanged);
             // 
             // cbList
             // 
+            this.cbList.Enabled = false;
             this.cbList.AutoSize = true;
             this.cbList.Location = new System.Drawing.Point(7, 102);
             this.cbList.Margin = new System.Windows.Forms.Padding(4);
@@ -536,9 +543,11 @@
             this.cbList.TabIndex = 48;
             this.cbList.Text = "Use List";
             this.cbList.UseVisualStyleBackColor = true;
+            this.cbList.CheckedChanged += new System.EventHandler(this.cbList_CheckedChanged);
             // 
             // boxZMargin2
             // 
+            this.boxZMargin2.Enabled = false;
             this.boxZMargin2.Location = new System.Drawing.Point(142, 72);
             this.boxZMargin2.Margin = new System.Windows.Forms.Padding(4);
             this.boxZMargin2.Name = "boxZMargin2";
@@ -548,6 +557,7 @@
             // 
             // boxYMargin2
             // 
+            this.boxYMargin2.Enabled = false;
             this.boxYMargin2.Location = new System.Drawing.Point(75, 72);
             this.boxYMargin2.Margin = new System.Windows.Forms.Padding(4);
             this.boxYMargin2.Name = "boxYMargin2";
@@ -557,6 +567,7 @@
             // 
             // boxXMargin2
             // 
+            this.boxXMargin2.Enabled = false;
             this.boxXMargin2.Location = new System.Drawing.Point(7, 72);
             this.boxXMargin2.Margin = new System.Windows.Forms.Padding(4);
             this.boxXMargin2.Name = "boxXMargin2";
@@ -594,6 +605,7 @@
             // 
             // boxZMargin1
             // 
+            this.boxZMargin1.Enabled = false;
             this.boxZMargin1.Location = new System.Drawing.Point(142, 47);
             this.boxZMargin1.Margin = new System.Windows.Forms.Padding(4);
             this.boxZMargin1.Name = "boxZMargin1";
@@ -603,6 +615,7 @@
             // 
             // boxYMargin1
             // 
+            this.boxYMargin1.Enabled = false;
             this.boxYMargin1.Location = new System.Drawing.Point(75, 47);
             this.boxYMargin1.Margin = new System.Windows.Forms.Padding(4);
             this.boxYMargin1.Name = "boxYMargin1";
@@ -612,6 +625,7 @@
             // 
             // boxXMargin1
             // 
+            this.boxXMargin1.Enabled = false;
             this.boxXMargin1.Location = new System.Drawing.Point(7, 47);
             this.boxXMargin1.Margin = new System.Windows.Forms.Padding(4);
             this.boxXMargin1.Name = "boxXMargin1";

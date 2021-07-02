@@ -26,6 +26,7 @@ namespace D3D_Debug_Overlay
         int posX;
         int posY;
         int size;
+        int doorIndex;
         Color color;
         Color doorColor;
 
@@ -235,23 +236,58 @@ namespace D3D_Debug_Overlay
             float Z = Memory.ManageMemory.ReadMemory<float>(zPtr);
             if (cbDoor.Checked)
             {
-                if (!cbList.Checked)
+                float XMargin1 = float.Parse(boxXMargin1.Text);
+                float XMargin2 = float.Parse(boxXMargin2.Text);
+                float YMargin1 = float.Parse(boxYMargin1.Text);
+                float YMargin2 = float.Parse(boxYMargin2.Text);
+                float ZMargin1 = float.Parse(boxZMargin1.Text);
+                float ZMargin2 = float.Parse(boxZMargin2.Text);
+                if (cbList.Checked)
                 {
-                    if (float.Parse(boxXMargin1.Text) <= X &&
-                        float.Parse(boxXMargin2.Text) >= X)
+                    if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt")))
                     {
-                        colorX = doorColor;
+                        if (cbFullList.Checked)
+                        {
+                            foreach (string door in File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt")))
+                            {
+                                string[] doorValues = door.Split(';');
+                                if (float.Parse(doorValues[1]) <= X && float.Parse(doorValues[2]) >= X)
+                                {
+                                    colorX = doorColor;
+                                }
+                                if (float.Parse(doorValues[3]) <= Y && float.Parse(doorValues[4]) >= Y)
+                                {
+                                    colorY = doorColor;
+                                }
+                                if (float.Parse(doorValues[5]) <= Z && float.Parse(doorValues[6]) >= Z)
+                                {
+                                    colorZ = doorColor;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string[] doorDropdown = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt"))[doorIndex].Split(';');
+                            XMargin1 = float.Parse(doorDropdown[1]);
+                            XMargin2 = float.Parse(doorDropdown[2]);
+                            YMargin1 = float.Parse(doorDropdown[3]);
+                            YMargin2 = float.Parse(doorDropdown[4]);
+                            ZMargin1 = float.Parse(doorDropdown[5]);
+                            ZMargin2 = float.Parse(doorDropdown[6]); 
+                        }
                     }
-                    if (float.Parse(boxYMargin1.Text) <= Y &&
-                        float.Parse(boxYMargin2.Text) >= Y)
-                    {
-                        colorY = doorColor;
-                    }
-                    if (float.Parse(boxZMargin1.Text) <= Z &&
-                        float.Parse(boxZMargin2.Text) >= Z)
-                    {
-                        colorZ = doorColor;
-                    }
+                }
+                if (XMargin1 <= X && XMargin2 >= X)
+                {
+                    colorX = doorColor;
+                }
+                if (YMargin1 <= Y && YMargin2 >= Y)
+                {
+                    colorY = doorColor;
+                }
+                if (ZMargin1 <= Z && ZMargin2 >= Z)
+                {
+                    colorZ = doorColor;
                 }
             }
             _captureProcess.CaptureInterface.DrawOverlayInGame(new Capture.Hook.Common.Overlay
@@ -557,5 +593,113 @@ namespace D3D_Debug_Overlay
         }
 
         #endregion
+
+        #region cbDoor Enables
+        private void cbList_CheckedChanged(object sender, EventArgs e)
+        {
+            cbFullList.Enabled = !cbFullList.Enabled;
+            if (cbList.Checked)
+            {
+                boxXMargin1.Enabled = false;
+                boxXMargin2.Enabled = false;
+                boxYMargin1.Enabled = false;
+                boxYMargin2.Enabled = false;
+                boxZMargin1.Enabled = false;
+                boxZMargin2.Enabled = false;
+            }
+            else if (cbDoor.Checked)
+            {
+                boxXMargin1.Enabled = true;
+                boxXMargin2.Enabled = true;
+                boxYMargin1.Enabled = true;
+                boxYMargin2.Enabled = true;
+                boxZMargin1.Enabled = true;
+                boxZMargin2.Enabled = true;
+            }
+            if (cbList.Checked && !cbFullList.Checked)
+            {
+                dropdownDoors.Enabled = true;
+            }
+            else
+            {
+                dropdownDoors.Enabled = false;
+            }
+            if (cbList.Checked && File.Exists(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt")))
+            {
+                foreach (string door in File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt")))
+                {
+                    dropdownDoors.Items.Add(door.Split(';')[0]);
+                }
+            }
+            else
+            {
+                dropdownDoors.Items.Clear();
+            }
+        }
+
+        private void cbFullList_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbList.Checked && !cbFullList.Checked)
+            {
+                dropdownDoors.Enabled = true;
+            }
+            else
+            {
+                dropdownDoors.Enabled = false;
+            }
+        }
+
+        private void boxApp_TextChanged(object sender, EventArgs e)
+        {
+            dropdownDoors.Items.Clear();
+            if (cbList.Checked && File.Exists(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt")))
+            {
+                foreach (string door in File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), boxApp.Text + ".txt")))
+                {
+                    dropdownDoors.Items.Add(door.Split(';')[0]);
+                }
+            }
+        }
+
+        private void dropdownDoors_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            doorIndex = dropdownDoors.SelectedIndex;
+        }
+
+        #endregion
+
+        private void cbDoor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbDoor.Checked)
+            {
+                cbList.Enabled = false;
+                cbFullList.Enabled = false;
+                dropdownDoors.Enabled = false;
+                boxXMargin1.Enabled = false;
+                boxXMargin2.Enabled = false;
+                boxYMargin1.Enabled = false;
+                boxYMargin2.Enabled = false;
+                boxZMargin1.Enabled = false;
+                boxZMargin2.Enabled = false;
+            }
+            else
+            {
+                cbList.Enabled = true;
+                if (cbList.Checked)
+                {
+                    cbFullList.Enabled = true;
+                    if (!cbFullList.Checked)
+                    {
+                        dropdownDoors.Enabled = true;
+                    }
+                }
+                boxXMargin1.Enabled = true;
+                boxXMargin2.Enabled = true;
+                boxYMargin1.Enabled = true;
+                boxYMargin2.Enabled = true;
+                boxZMargin1.Enabled = true;
+                boxZMargin2.Enabled = true;
+            }
+        }
     }
 }
