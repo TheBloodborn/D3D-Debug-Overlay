@@ -35,6 +35,33 @@ namespace D3D_Debug_Overlay
 
         public WindowForm()
         {
+            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay"));
+            }
+            if (!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt")))
+            {
+                File.CreateText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt"));
+            }
+            if (File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt")).Length != 5)
+            {
+                string[] saves = new string[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    saves[i] = "Slot " + (i+1) + ";" +
+                        200 + ";" +
+                        "00000000" + ";" +
+                        70 + ";" +
+                        74 + ";" +
+                        78 + ";" +
+                        20 + ";" +
+                        "FFFF0000" + ";" +
+                        25 + ";" +
+                        25 + ";" +
+                        "FF00FF00";
+                }
+                File.WriteAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt"), saves);
+            }
             InitializeComponent();
         }
 
@@ -392,6 +419,122 @@ namespace D3D_Debug_Overlay
             }
             return 1;
         }
+        #endregion
+
+        /// <summary>
+        /// Save settings in presets for future use.
+        /// </summary>
+        #region Save Presets
+        private void SavePreset(int slot)
+        {
+            txtDebugLog.Text += "Saving Slot " + slot + "...\r\n";
+            string[] saves = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt"));
+            string name;
+            if (boxApp.Text.Equals(""))
+            {
+                name = "Slot " + slot;
+            }
+            else
+            {
+                name = boxApp.Text;
+            }
+            saves[slot - 1] = 
+                name + ";" + 
+                boxRefresh.Text + ";" + 
+                boxAddress.Text + ";" + 
+                boxX.Text + ";" + 
+                boxY.Text + ";" + 
+                boxZ.Text + ";" + 
+                boxSize.Text + ";" + 
+                boxColour.Text + ";" + 
+                boxPosX.Text + ";" + 
+                boxPosY.Text + ";" + 
+                boxDoorColour.Text;
+            File.WriteAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt"), saves);
+            txtDebugLog.Text += "Finished Saving Slot " + slot + ".\r\n";
+        }
+
+        private void BtnSave1_Click(object sender, EventArgs e)
+        {
+            SavePreset(1);
+        }
+
+        private void BtnSave2_Click(object sender, EventArgs e)
+        {
+            SavePreset(2);
+        }
+
+        private void BtnSave3_Click(object sender, EventArgs e)
+        {
+            SavePreset(3);
+        }
+
+        private void BtnSave4_Click(object sender, EventArgs e)
+        {
+            SavePreset(4);
+        }
+
+        private void BtnSave5_Click(object sender, EventArgs e)
+        {
+            SavePreset(5);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Save settings in presets for future use.
+        /// </summary>
+        #region Load Presets
+        private void LoadPreset(int slot) 
+        {
+            txtDebugLog.Text += "Loading Slot " + slot + "...\r\n";
+            string[] save = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "D3D Debug Overlay\\Presets.txt"))[slot-1].Split(';');
+            if (save.Length == 11)
+            {
+                boxApp.Text = save[0];
+                boxRefresh.Text = save[1];
+                boxAddress.Text = save[2];
+                boxX.Text = save[3];
+                boxY.Text = save[4];
+                boxZ.Text = save[5];
+                boxSize.Text = save[6];
+                boxColour.Text = save[7];
+                boxPosX.Text = save[8];
+                boxPosY.Text = save[9];
+                boxDoorColour.Text = save[10];
+                txtDebugLog.Text += "Finished Loading Slot " + slot + ".\r\n";
+            }
+            else
+            {
+                txtDebugLog.Text += "Loading failed: Slot " + slot + " is corrupted.\r\n";
+            }
+        }
+
+        private void BtnLoad1_Click(object sender, EventArgs e)
+        {
+            LoadPreset(1);
+        }
+
+        private void BtnLoad2_Click(object sender, EventArgs e)
+        {
+            LoadPreset(2);
+        }
+
+        private void BtnLoad3_Click(object sender, EventArgs e)
+        {
+            LoadPreset(3);
+        }
+
+        private void BtnLoad4_Click(object sender, EventArgs e)
+        {
+            LoadPreset(4);
+        }
+
+        private void BtnLoad5_Click(object sender, EventArgs e)
+        {
+            LoadPreset(5);
+        }
+
         #endregion
     }
 }
