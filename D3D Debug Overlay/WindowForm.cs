@@ -187,6 +187,14 @@ namespace D3D_Debug_Overlay
         }
 
         /// <summary>
+        /// Turns the door finding tool on or off again.
+        /// </summary>
+        /*private void SwitchDoorFinding()
+        {
+            cbDoor.Checked = !cbDoor.Checked;
+        }*/
+
+        /// <summary>
         /// Turns the display on or off again.
         /// </summary>
         private void SwitchDisplay()
@@ -413,7 +421,14 @@ namespace D3D_Debug_Overlay
             while (!bw.CancellationPending)
             {
                 Thread.Sleep(int.Parse(boxRefresh.Text));
-                DrawOverlay(3);
+                if (Control.ModifierKeys == Keys.Control)
+                {
+                    DrawOverlay(2);
+                }
+                else
+                {
+                    DrawOverlay(3);
+                }
             }
             return 1;
         }
@@ -465,12 +480,18 @@ namespace D3D_Debug_Overlay
         {
             while (!bw.CancellationPending)
             {
-                if (Control.ModifierKeys == Keys.Control)
+                if (Control.ModifierKeys == (Keys.Control | Keys.Shift))
                 {
                     SwitchDisplay();
                     Thread.Sleep(300);
                 }
                 Thread.Sleep(10);
+                /*if (Control.ModifierKeys == (Keys.Control | Keys.Alt))
+                {
+                    SwitchDoorFinding();
+                    Thread.Sleep(300);
+                }
+                Thread.Sleep(10);*/
             }
             return 1;
         }
