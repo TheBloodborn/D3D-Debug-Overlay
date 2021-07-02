@@ -27,6 +27,7 @@ namespace D3D_Debug_Overlay
         int posY;
         int size;
         Color color;
+        Color doorColor;
 
         /// <summary>
         /// Instantialize the Form.
@@ -226,27 +227,54 @@ namespace D3D_Debug_Overlay
         }
         private void DrawOverlay(bool hide)
         {
+            Color colorX = color;
+            Color colorY = color;
+            Color colorZ = color;
+            float X = Memory.ManageMemory.ReadMemory<float>(xPtr);
+            float Y = Memory.ManageMemory.ReadMemory<float>(yPtr);
+            float Z = Memory.ManageMemory.ReadMemory<float>(zPtr);
+            if (cbDoor.Checked)
+            {
+                if (!cbList.Checked)
+                {
+                    if (float.Parse(boxXMargin1.Text) <= X &&
+                        float.Parse(boxXMargin2.Text) >= X)
+                    {
+                        colorX = doorColor;
+                    }
+                    if (float.Parse(boxYMargin1.Text) <= Y &&
+                        float.Parse(boxYMargin2.Text) >= Y)
+                    {
+                        colorY = doorColor;
+                    }
+                    if (float.Parse(boxZMargin1.Text) <= Z &&
+                        float.Parse(boxZMargin2.Text) >= Z)
+                    {
+                        colorZ = doorColor;
+                    }
+                }
+            }
             _captureProcess.CaptureInterface.DrawOverlayInGame(new Capture.Hook.Common.Overlay
             {
                 Elements = new List<Capture.Hook.Common.IOverlayElement>
                 {
                     new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
                             Location = new Point(posX, posY),
-                            Color = color,
+                            Color = colorX,
                             AntiAliased = true,
-                            Text = "X: " + Memory.ManageMemory.ReadMemory<float>(xPtr)
+                            Text = "X: " + X
                         },
                     new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
                             Location = new Point(posX, posY + size + 5),
-                            Color = color,
+                            Color = colorY,
                             AntiAliased = true,
-                            Text = "Y: " + Memory.ManageMemory.ReadMemory<float>(yPtr)
+                            Text = "Y: " + Y
                         },
                     new Capture.Hook.Common.TextElement(new System.Drawing.Font("Arial", size, FontStyle.Bold)) {
                             Location = new Point(posX, posY + (2 * size) + 10),
-                            Color = color,
+                            Color = colorZ,
                             AntiAliased = true,
-                            Text = "Z: " + Memory.ManageMemory.ReadMemory<float>(zPtr)
+                            Text = "Z: " + Z
                         },
                 },
                 Hidden = hide
@@ -274,6 +302,7 @@ namespace D3D_Debug_Overlay
                 posY = int.Parse(boxPosY.Text);
                 size = int.Parse(boxSize.Text);
                 color = Color.FromArgb(Convert.ToInt32(boxColour.Text, 16));
+                doorColor = Color.FromArgb(Convert.ToInt32(boxDoorColour.Text, 16));
                 this.bwOverlayDrawer.RunWorkerAsync();
             }
             //btnStopDisplay.Enabled = true;
@@ -350,15 +379,7 @@ namespace D3D_Debug_Overlay
             while (!bw.CancellationPending)
             {
                 Thread.Sleep(int.Parse(boxRefresh.Text));
-                if (Control.ModifierKeys == Keys.Alt)
-                {
-                    DrawOverlay(2);
-                    //return 2; // If you want to set Alt to permanantly switch drawing overlays for this thread process
-                }
-                else
-                {
-                    DrawOverlay(3);
-                }
+                DrawOverlay(3);
             }
             return 1;
         }
