@@ -187,10 +187,8 @@ namespace D3D_Debug_Overlay
         }
 
         /// <summary>
-        /// Determines what is drawn in the overlay.
-        /// modes {0, 1, 2, 3} correspond to {false, true, cbDrawOverlay.Checked, !cbDrawOverlay.Checked}.
+        /// Turns the display on or off again.
         /// </summary>
-        
         private void SwitchDisplay()
         {
             if (bwOverlayDrawer.IsBusy)
